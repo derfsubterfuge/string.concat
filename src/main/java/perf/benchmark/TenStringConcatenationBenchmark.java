@@ -32,6 +32,7 @@
 package perf.benchmark;
 
 import com.google.common.base.Joiner;
+import java.util.StringJoiner;
 import org.apache.commons.lang3.StringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
@@ -165,5 +166,21 @@ public class TenStringConcatenationBenchmark {
                 .stream()
                 .collect(Collectors.joining());
         bh.consume(combined);
+    }
+
+    @Benchmark
+    public void testStringJoiner(Blackhole bh){
+        StringJoiner joiner = new StringJoiner(",");
+        joiner.add(s0);
+        joiner.add(s1);
+        joiner.add(s2);
+        joiner.add(s3);
+        joiner.add(s4);
+        joiner.add(s5);
+        joiner.add(s6);
+        joiner.add(s7);
+        joiner.add(s8);
+        joiner.add(s9);
+        bh.consume(joiner.toString());
     }
 }
