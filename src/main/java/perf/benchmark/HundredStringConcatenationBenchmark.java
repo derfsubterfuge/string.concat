@@ -32,6 +32,12 @@
 package perf.benchmark;
 
 import com.google.common.base.Joiner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
@@ -41,14 +47,6 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 import org.openjdk.jmh.infra.Blackhole;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Warmup(iterations = 3, time = 2, timeUnit = TimeUnit.SECONDS)
 @Measurement(iterations = 10, time = 2, timeUnit = TimeUnit.SECONDS)
@@ -131,5 +129,15 @@ public class HundredStringConcatenationBenchmark {
                 .stream()
                 .collect(Collectors.joining());
         bh.consume(combined);
+    }
+
+
+    @Benchmark
+    public void testStringJoiner(Blackhole bh){
+        StringJoiner joiner = new StringJoiner(",");
+        for(String s : strings) {
+            joiner.add(s);
+        }
+        bh.consume(joiner.toString());
     }
 }

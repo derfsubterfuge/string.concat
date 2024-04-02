@@ -32,6 +32,7 @@
 package perf.benchmark;
 
 import com.google.common.base.Joiner;
+import java.util.StringJoiner;
 import org.apache.commons.lang3.StringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
@@ -54,7 +55,7 @@ import java.util.stream.Collectors;
 public class TwoStringConcatenationBenchmark {
     private String s0;
     private String s1;
-    
+
     @Setup
     public void setupTest(){
         s0 = UUID.randomUUID().toString();
@@ -120,4 +121,13 @@ public class TwoStringConcatenationBenchmark {
                 .collect(Collectors.joining());
         bh.consume(combined);
     }
+
+    @Benchmark
+    public void testStringJoiner(Blackhole bh){
+        StringJoiner joiner = new StringJoiner(",");
+        joiner.add(s0);
+        joiner.add(s1);
+        bh.consume(joiner.toString());
+    }
+
 }
